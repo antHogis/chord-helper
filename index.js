@@ -82,7 +82,10 @@ const modeSteps = {
     locrian: getSteps(6),
 };
 
-for (const [mode, steps] of Object.entries(modeSteps)) {
+const scaleDegrees = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
+
+// TODO better name for variable
+const modeObjects = Object.entries(modeSteps).map(([mode, steps]) => {
     const rootNoteIndex = twelveTones.indexOf(rootNote);
 
     const notes = getScaleNotes(rootNoteIndex, 0, steps, [rootNote]);
@@ -96,5 +99,12 @@ for (const [mode, steps] of Object.entries(modeSteps)) {
     });
     const chords = triads.map(([root, third, fifth]) => root + getTriadSymbol(root, third, fifth));
 
-    console.log(rootNote, mode, chords.join(', '));
-}
+    const modeObject = { mode };
+    scaleDegrees.forEach((scaleDegree, index) => {
+        modeObject[scaleDegree] = chords[index];
+    });
+    return modeObject;
+});
+
+console.table(modeObjects);
+
